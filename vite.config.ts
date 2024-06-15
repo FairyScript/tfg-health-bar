@@ -25,8 +25,9 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            react: ['react', 'react-dom', 'react-router-dom', 'ahooks'],
+            react: ['react', 'react-dom', 'react-router-dom'],
             emotion: ['@emotion/react'],
+            mantine: ['@mantine/core', '@mantine/hooks'],
           },
         },
       },
@@ -34,8 +35,7 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       port: Number(env.VITE_PORT) ?? 3000,
-      proxy: {
-      },
+      proxy: {},
     },
   }
 })
