@@ -59,7 +59,6 @@ const Control: React.FC = () => {
   return (
     <Container>
       <div>{state.ui.isConnected ? '已连接' : '未连接'}</div>
-      <HealthBar />
       <Slider
         color="blue"
         min={0}
@@ -75,7 +74,10 @@ const Control: React.FC = () => {
           { value: 50, label: '50%' },
           { value: 80, label: '80%' },
         ]}
+        mb='lg'
       />
+      <HealthBar />
+
       <Button
         onClick={() => {
           connect()

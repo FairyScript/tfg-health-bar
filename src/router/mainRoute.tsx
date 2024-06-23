@@ -1,10 +1,10 @@
 import { lazy } from 'react'
-import { Navigate, createHashRouter } from 'react-router-dom'
+import { Navigate, createBrowserRouter } from 'react-router-dom'
 
 const MainPage = lazy(() => import('../MainPage'))
 const Control = lazy(() => import('../Control'))
 
-export const mainRoute = createHashRouter([
+export const mainRoute = createBrowserRouter([
   {
     path: '/',
     element: <MainPage />,
