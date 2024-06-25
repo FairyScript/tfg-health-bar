@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
-import HealthBar from './components/HealthBar'
-import { resumeStore, store } from './store'
-import { mainPeer } from './msg/mainPeer'
-import { Flex, List, ListItem } from '@mantine/core'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { Flex, List, ListItem } from '@mantine/core'
+import { useEffect } from 'react'
+import HealthBar from './components/HealthBar'
+import { mainPeer } from './msg/mainPeer'
+import { resumeStore, store } from './store'
 
 mainPeer()
 const MainPage: React.FC = () => {
@@ -23,6 +23,9 @@ const MainPage: React.FC = () => {
       gap="md"
       css={css`
         padding: 0 20px;
+        background-image: url('/arianne-elliott-ghroth-11.jpg');
+        background-size: cover;
+        height: 100vh;
       `}
     >
       <Flex

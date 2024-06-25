@@ -3,7 +3,7 @@ import { Navigate, createBrowserRouter } from 'react-router-dom'
 
 const MainPage = lazy(() => import('../MainPage'))
 const Control = lazy(() => import('../Control'))
-
+const Slot = lazy(() => import('../Slot'))
 export const mainRoute = createBrowserRouter([
   {
     path: '/',
@@ -13,7 +13,10 @@ export const mainRoute = createBrowserRouter([
     path: '/ctl',
     element: <Control />,
   },
-
+  {
+    path: '/slot',
+    element: <Slot />,
+  },
   {
     path: '*',
     element: <Navigate to="/" />,
