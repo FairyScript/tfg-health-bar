@@ -47,10 +47,15 @@ const MainPage: React.FC = () => {
           {((state.health.current * 100) / state.health.total).toFixed(0)}%
         </CurrentHealth>
       </Flex>
-      <List icon={null}>
+      <List
+        icon={null}
+        css={css`
+        color:white;
+      `}
+      >
         {state.health.log.map((item) => (
           <ListItem key={item.id} css={style}>
-            队伍 <PartyName>{item.name}</PartyName> 造成了{' '}
+            队伍<PartyName>{item.name}</PartyName>造成了
             <DamageValue>{item.value}</DamageValue>
             点伤害
           </ListItem>
@@ -70,10 +75,12 @@ const CurrentHealth = styled.span`
 
 const PartyName = styled.span`
   color: orange;
+  padding: 0 5px;
 `
 
 const DamageValue = styled.span`
   color: red;
+  padding: 0 5px;
 `
 
 const style = css`

@@ -1,5 +1,5 @@
 import { sharex, watch } from 'helux'
-import { IIog } from './@types/message'
+import type { IIog } from './@types/message'
 
 export const store = sharex({
   ui: {
@@ -11,13 +11,21 @@ export const store = sharex({
     current: 100,
     log: [] as IIog[],
   },
+  slot: {
+    count: 5,
+    range: {
+      min: 1,
+      max: 10,
+    },
+    answers: [] as number[],
+  },
 })
 
 watch(
   () => {
     localStorage.setItem('store', JSON.stringify(store.getSnap(false).health))
   },
-  { deps: () => [store.state.health] }
+  { deps: () => [store.state.health] },
 )
 
 export function resumeStore() {

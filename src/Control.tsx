@@ -9,12 +9,12 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import HealthBar from './components/HealthBar'
-import { store } from './store'
-import { useEffect } from 'react'
-import { connect, send } from './msg/controlPeer'
 import { sharex, useWatch } from 'helux'
+import { useEffect } from 'react'
 import { IMessage } from './@types/message'
+import HealthBar from './components/HealthBar'
+import { connect, send } from './msg/controlPeer'
+import { store } from './store'
 
 const formStore = sharex({
   name: '',
@@ -38,23 +38,8 @@ const Control: React.FC = () => {
 
       send(data)
     },
-    () => [state.health]
+    () => [state.health],
   )
-
-  const [form] = formStore.useState()
-
-  const onSubmit = () => {
-    setState((d) => {
-      const value = parseInt(form.value)
-      const newV = Math.max(0, d.health.current - value)
-      d.health.current = newV
-      d.health.log.push({
-        name: form.name,
-        value,
-        id: Date.now(),
-      })
-    })
-  }
 
   return (
     <Container>
@@ -74,7 +59,7 @@ const Control: React.FC = () => {
           { value: 50, label: '50%' },
           { value: 80, label: '80%' },
         ]}
-        mb='lg'
+        mb="lg"
       />
       <HealthBar />
 
@@ -86,6 +71,37 @@ const Control: React.FC = () => {
       >
         连接
       </Button>
+
+      <HealthCtl />
+    </Container>
+  )
+}
+
+export default Control
+
+const SlotCtl: React.FC = () => {
+  return <div></div>
+}
+
+const HealthCtl: React.FC = () => {
+  const [state, setState] = store.useState()
+  const [form] = formStore.useState()
+
+  const onSubmit = () => {
+    setState((d) => {
+      const value = Number.parseInt(form.value)
+      const newV = Math.max(0, d.health.current - value)
+      d.health.current = newV
+      d.health.log.push({
+        name: form.name,
+        value,
+        id: Date.now(),
+      })
+    })
+  }
+
+  return (
+    <div>
       <Fieldset legend="新增条目">
         <TextInput
           label="name"
@@ -149,8 +165,6 @@ const Control: React.FC = () => {
           </Popover.Dropdown>
         </Popover>
       </Flex>
-    </Container>
+    </div>
   )
 }
-
-export default Control

@@ -3,7 +3,7 @@ export interface IMessage {
   data?: IUpdateMessage
 }
 
-export type IMessageType = 'sync' | 'update' | 'reset' | 'hi'
+export type IMessageType = 'sync' | 'update' | 'reset' | 'hi' | 'slot'
 
 export type IUpdateMessage = {
   total: number

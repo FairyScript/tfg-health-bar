@@ -1,13 +1,67 @@
+import { css } from '@emotion/react'
+import { Button, Center, Flex } from '@mantine/core'
+import { useMutable } from 'helux'
 import SlotCounter from 'react-slot-counter'
+import { store } from './store'
 
 const Slot: React.FC = () => {
+  const [state, setState] = store.useState()
+  const [answer, setAnswer] = useMutable({
+    answers: new Array(state.slot.count).fill(0) as number[],
+  })
   return (
-    <div>
-      <SlotCounter value={123456} />
-      <SlotCounter value={36.5} />
-      <SlotCounter value="1,234,567" />
-      <SlotCounter value={['1', '2', '3', '4', '5', '6']} />
-      <SlotCounter value="??????" />
+    <div
+      css={css`
+      height: 100vh;
+      background-color: aliceblue;
+    `}
+    >
+      <Center
+        css={css`
+      .text{
+        font-size: 50px;
+        font-weight: bold;
+        color: #333;
+        padding: 0 5px;
+      }
+  `}
+      >
+        <Flex direction="column" align="center">
+          <Flex>
+            {answer.answers.map((item, index) => (
+              <div
+                key={index}
+                className="text"
+                css={css`
+                border: solid 1px #333;
+                margin: 20px;
+              `}
+              >
+                <SlotCounter value={item} />
+              </div>
+            ))}
+          </Flex>
+          <Button
+            w={200}
+            onClick={() =>
+              setAnswer((d) => {
+                d.answers = new Array(state.slot.count)
+                  .fill(0)
+                  .map(
+                    () =>
+                      Math.floor(
+                        Math.random() *
+                          (state.slot.range.max - state.slot.range.min + 1),
+                      ) + state.slot.range.min,
+                  )
+              })
+            }
+            color="orange"
+          >
+            抽奖!
+          </Button>
+        </Flex>
+      </Center>
     </div>
   )
 }
