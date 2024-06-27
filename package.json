@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.11.5",
     "@mantine/core": "^7.10.2",
     "@mantine/hooks": "^7.10.2",
+    "ably": "^2.2.0",
     "helux": "^4.3.6",
     "peerjs": "^1.5.4",
     "react": "^18.3.1",
@@ -22,7 +23,7 @@
     "react-slot-counter": "^2.3.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.2",
+    "@biomejs/biome": "^1.8.3",
     "@swc/plugin-emotion": "^3.0.7",
     "@types/bun": "^1.1.5",
     "@types/react": "^18.3.3",

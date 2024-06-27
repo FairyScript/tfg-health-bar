@@ -3,7 +3,13 @@ export interface IMessage {
   data?: IUpdateMessage | ISlotMessage
 }
 
-export type IMessageType = 'sync' | 'update' | 'reset' | 'hi' | 'slot'
+export type IMessageType =
+  | 'sync'
+  | 'update'
+  | 'reset'
+  | 'hi'
+  | 'slot'
+  | 'clearSlot'
 
 export type IUpdateMessage = {
   total: number
@@ -24,5 +30,6 @@ export type ISlotMessage = {
 export type IIog = {
   name: string
   value: number
+  type: 'heal' | 'damage' | 'save' | 'jam'
   id: number
 }

@@ -1,3 +1,4 @@
+import { emit } from 'helux'
 import Peer from 'peerjs'
 import type { IMessage } from '../@types/message'
 import { store } from '../store'
@@ -46,6 +47,9 @@ export function mainPeer() {
             d.slot = msg.data!
           })
           break
+        }
+        case 'clearSlot': {
+          emit('clearSlot')
         }
       }
     })

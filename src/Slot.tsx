@@ -1,16 +1,38 @@
 import { css } from '@emotion/react'
 import { Button, Center, Flex } from '@mantine/core'
-import { useMutable } from 'helux'
+import { useMutable, useOnEvent } from 'helux'
 import SlotCounter from 'react-slot-counter'
 import { mainPeer } from './msg/mainPeer'
 import { store } from './store'
 mainPeer()
+
+// 已经抽中的人
+const alreadySet = new Set<number>(
+  JSON.parse(localStorage.getItem('alreadySet') || '[]'),
+)
+function setAlreadySet(num: number) {
+  alreadySet.add(num)
+  localStorage.setItem('alreadySet', JSON.stringify(Array.from(alreadySet)))
+}
+function clearAlreadySet() {
+  alreadySet.clear()
+  localStorage.setItem('alreadySet', '[]')
+}
+
+function generateRandom(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
 const Slot: React.FC = () => {
   const [state] = store.useState()
   const [answer, setAnswer] = useMutable({
     answers: new Array(state.slot.count).fill(0) as number[],
   })
+
+  useOnEvent('clearSlot', () => {
+    clearAlreadySet()
+  })
+
   return (
     <div
       css={css`
@@ -39,7 +61,7 @@ const Slot: React.FC = () => {
                 margin: 20px;
               `}
               >
-                <SlotCounter value={item} />
+                <SlotCounter value={String(item).padStart(5, '0')} />
               </div>
             ))}
           </Flex>
@@ -47,16 +69,31 @@ const Slot: React.FC = () => {
             w={200}
             onClick={() =>
               setAnswer((d) => {
-                d.answers = new Array(state.slot.count)
-                  .fill(0)
-                  .map((_, i) =>
-                    state.slot.godMode && state.slot.answers[i]
-                      ? state.slot.answers[i]
-                      : Math.floor(
-                          Math.random() *
-                            (state.slot.range.max - state.slot.range.min + 1),
-                        ) + state.slot.range.min,
+                d.answers = new Array(state.slot.count).fill(0).map((_, i) => {
+                  const godMode = state.slot.godMode && state.slot.answers[i]
+                  if (godMode) return state.slot.answers[i]
+
+                  let c = 0
+                  let num = generateRandom(
+                    state.slot.range.min,
+                    state.slot.range.max,
                   )
+                  while (alreadySet.has(num)) {
+                    c++
+                    if (c > 100) {
+                      return -1
+                    }
+                    if (alreadySet.size === state.slot.count) {
+                      return -1
+                    }
+                    num = generateRandom(
+                      state.slot.range.min,
+                      state.slot.range.max,
+                    )
+                  }
+                  setAlreadySet(num)
+                  return num
+                })
               })
             }
             color="orange"

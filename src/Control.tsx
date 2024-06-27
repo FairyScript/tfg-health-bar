@@ -4,11 +4,14 @@ import {
   Container,
   Fieldset,
   Flex,
+  Group,
   NumberInput,
   Popover,
+  Radio,
   Text,
   TextInput,
 } from '@mantine/core'
+import { useDebouncedCallback } from '@mantine/hooks'
 import { sharex, useMutable, useWatch } from 'helux'
 import { useEffect } from 'react'
 import type { IMessage } from './@types/message'
@@ -20,6 +23,7 @@ const formStore = sharex({
   name: '',
   value: '0',
   deleteOpen: false,
+  type: 'damage' as 'damage' | 'heal' | 'save' | 'jam',
 })
 
 const Control: React.FC = () => {
@@ -41,13 +45,17 @@ export default Control
 const SlotCtl: React.FC = () => {
   const [state, setState] = store.useState()
 
+  const handleSearch = useDebouncedCallback((data: IMessage) => {
+    send(data)
+  }, 500)
+
   useWatch(
     () => {
       const data: IMessage = {
         type: 'slot',
         data: state.slot,
       }
-      send(data)
+      handleSearch(data)
     },
     () => [state.slot],
   )
@@ -72,6 +80,15 @@ const SlotCtl: React.FC = () => {
           value={state.slot.range.max}
           onChange={store.sync((to) => to.slot.range.max)}
         />
+        <Button
+          onClick={() =>
+            send({
+              type: 'clearSlot',
+            })
+          }
+        >
+          清空中奖人
+        </Button>
         <Checkbox
           label="U God?"
           checked={state.slot.godMode}
@@ -138,12 +155,14 @@ const HealthCtl: React.FC = () => {
   const onSubmit = () => {
     setState((d) => {
       const value = Number.parseInt(form.value)
-      const newV = d.health.current - value
+      const x = ['damage', 'jam'].includes(form.type) ? -1 : 1
+      const newV = d.health.current + value * x
       d.health.current = newV
       d.health.log.push({
         name: form.name,
         value,
         id: Date.now(),
+        type: form.type,
       })
     })
   }
@@ -218,7 +237,20 @@ const HealthCtl: React.FC = () => {
           value={form.value}
           onChange={formStore.syncer.value}
         />
-        <Flex gap="md">
+        <Radio.Group
+          label="log类型"
+          withAsterisk
+          value={form.type}
+          onChange={formStore.syncer.type}
+        >
+          <Group mt="xs">
+            <Radio value="damage" label="伤害" />
+            <Radio value="heal" label="治疗" />
+            <Radio value="save" label="拯救" />
+            <Radio value="jam" label="破坏(降低拯救)" />
+          </Group>
+        </Radio.Group>
+        <Flex gap="md" mt={16}>
           <Button onClick={onSubmit}>提交</Button>
           <Popover
             width={200}

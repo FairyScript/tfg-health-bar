@@ -10,6 +10,10 @@ export const mainRoute = createBrowserRouter([
     element: <MainPage />,
   },
   {
+    path: '/day2',
+    element: <MainPage />,
+  },
+  {
     path: '/ctl',
     element: <Control />,
   },
