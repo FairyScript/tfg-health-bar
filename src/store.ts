@@ -17,6 +17,7 @@ export const store = sharex({
       min: 1,
       max: 10,
     },
+    godMode: false,
     answers: [] as number[],
   },
 })

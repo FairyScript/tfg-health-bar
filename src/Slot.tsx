@@ -2,10 +2,12 @@ import { css } from '@emotion/react'
 import { Button, Center, Flex } from '@mantine/core'
 import { useMutable } from 'helux'
 import SlotCounter from 'react-slot-counter'
+import { mainPeer } from './msg/mainPeer'
 import { store } from './store'
+mainPeer()
 
 const Slot: React.FC = () => {
-  const [state, setState] = store.useState()
+  const [state] = store.useState()
   const [answer, setAnswer] = useMutable({
     answers: new Array(state.slot.count).fill(0) as number[],
   })
@@ -47,12 +49,13 @@ const Slot: React.FC = () => {
               setAnswer((d) => {
                 d.answers = new Array(state.slot.count)
                   .fill(0)
-                  .map(
-                    () =>
-                      Math.floor(
-                        Math.random() *
-                          (state.slot.range.max - state.slot.range.min + 1),
-                      ) + state.slot.range.min,
+                  .map((_, i) =>
+                    state.slot.godMode && state.slot.answers[i]
+                      ? state.slot.answers[i]
+                      : Math.floor(
+                          Math.random() *
+                            (state.slot.range.max - state.slot.range.min + 1),
+                        ) + state.slot.range.min,
                   )
               })
             }

@@ -4,12 +4,18 @@ import { css } from '@emotion/react'
 const HealthBar: React.FC = () => {
   const [state] = store.useState()
 
+  const persent = (state.health.current / state.health.total) * 100
+
   const style = {
-    width: (state.health.current / state.health.total) * 100 + '%',
+    width: `${Math.max(persent, 0)}%`,
+  }
+
+  const redStyle = {
+    width: `${Math.abs(persent)}%`,
   }
   return (
     <div css={healthBar}>
-      <div style={style} className="health-bar red" />
+      <div style={redStyle} className="health-bar red" />
       <div style={style} className="health-bar blue" />
       <div style={style} className="health-bar green" />
     </div>
