@@ -1,6 +1,6 @@
 import { emit } from 'helux'
 import Peer from 'peerjs'
-import type { IMessage } from '../@types/message'
+import type { IMessage, ISlotMessage, IUpdateMessage } from '../@types/message'
 import { store } from '../store'
 
 let flag = false
@@ -37,14 +37,14 @@ export function mainPeer() {
         case 'update': {
           if (msg.data) {
             store.setDraft((d) => {
-              d.health = msg.data!
+              d.health = msg.data as IUpdateMessage
             })
           }
           break
         }
         case 'slot': {
           store.setDraft((d) => {
-            d.slot = msg.data!
+            d.slot = msg.data as ISlotMessage
           })
           break
         }

@@ -1,12 +1,12 @@
-import Peer, { DataConnection } from 'peerjs'
+import Peer, { type DataConnection } from 'peerjs'
+import type { IMessage, IUpdateMessage } from '../@types/message'
 import { store } from '../store'
-import { IMessage } from '../@types/message'
 
 let conn: DataConnection
 
 const peer = new Peer('dde91806-5604-453f-a770-bd62685bbac5')
-peer.on('open', function (id) {
-  console.log('My peer ID is: ' + id)
+peer.on('open', (id) => {
+  console.log(`My peer ID is: ${id}`)
   store.setDraft((d) => {
     d.ui.ready = true
   })
@@ -56,7 +56,7 @@ export function connect() {
       case 'update': {
         if (msg.data) {
           store.setDraft((d) => {
-            d.health = msg.data!
+            d.health = msg.data as IUpdateMessage
           })
         }
         break
