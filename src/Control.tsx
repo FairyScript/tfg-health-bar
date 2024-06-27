@@ -138,7 +138,7 @@ const HealthCtl: React.FC = () => {
   const onSubmit = () => {
     setState((d) => {
       const value = Number.parseInt(form.value)
-      const newV = Math.max(0, d.health.current - value)
+      const newV = d.health.current - value
       d.health.current = newV
       d.health.log.push({
         name: form.name,
